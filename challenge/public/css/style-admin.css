@@ -316,3 +316,36 @@ h2 {
 .delete-user{
     margin-left: 5px;
 }
+
+.roles-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Espaciado entre roles */
+    list-style: none;
+    padding: 0;
+}
+
+.roles-list li {
+    display: flex;
+    align-items: center;
+    background-color: #e0e0e0; /* Color de fondo */
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.roles-list button {
+    margin-left: 8px;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.roles-list button:hover {
+    background-color: #96050565; /* Azul más oscuro */
+}

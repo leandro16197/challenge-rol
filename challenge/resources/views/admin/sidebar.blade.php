@@ -1,6 +1,6 @@
 <div class="sidebar sidebar-dark sidebar-fixed border-end" style="width: 250px; height: 100vh;">
     <div class="content-sidebar">
-        <h4 class="titulo-dashboard text-white">The Events</h4>
+        <h4 class="titulo-dashboard text-white">C.R.U.D</h4>
         <p class=" border-bottom pb-3"></p>
         <h5 class="titulo-dashboard text-white">Dashboard</h5>
         <p class=" border-bottom pb-3"></p>
