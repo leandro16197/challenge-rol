@@ -41,6 +41,15 @@
                     <i class="fas fa-users-gear"></i> Roles
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="sidebar-li-text nav-link text-dark" href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+            </li>
         </ul>
     </div>
 </div>
