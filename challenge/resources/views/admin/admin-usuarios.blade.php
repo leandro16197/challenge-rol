@@ -55,12 +55,14 @@
                                                 <i class="fas fa-user-shield"></i> Modificar
                                             </button>
                                         </div>
-                                        <div class="mod-rol me-2">
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                data-bs-target="#deleteUserModal{{ $dato->id }}">
-                                                <i class="fas fa-trash-alt"></i> Eliminar
-                                            </button>
-                                        </div>
+                                        @if ($dato->id !== Auth::id())
+                                            <div class="mod-rol me-2">
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteUserModal{{ $dato->id }}">
+                                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                                </button>
+                                            </div>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -168,11 +170,11 @@
                                             @foreach ($dato->roles as $role)
                                                 <li id="role-{{ $dato->id }}-{{ $role->id }}">
                                                     {{ $role->name }}
-                                                    <button
-                                                        onclick="removeRole({{ $dato->id }}, {{ $role->id }})">❌</button>
+                                                    <button class="remove-role-btn" data-user-id="{{ $dato->id }}" data-role-id="{{ $role->id }}">❌</button>
                                                 </li>
                                             @endforeach
                                         </ul>
+                                        
 
                                         {{-- Agregar nuevos roles --}}
                                         <h6 class="mt-3">Agregar Rol:</h6>
@@ -181,8 +183,7 @@
                                                 <option value="{{ $role->id }}">{{ $role->name }}</option>
                                             @endforeach
                                         </select>
-                                        <button class="btn btn-success btn-sm mt-2"
-                                            onclick="addRole({{ $dato->id }})">
+                                        <button class="btn btn-success btn-sm mt-2 add-role-btn" data-user-id="{{ $dato->id }}">
                                             Agregar Rol
                                         </button>
                                     </div>
@@ -246,60 +247,12 @@
                     </div>
             </div>
             <div class="d-flex justify-content-center">
-                @if($totalUsuarios>5)
-                {{ $usuarios->links() }}
+                @if ($totalUsuarios > 5)
+                    {{ $usuarios->links() }}
                 @endif
             </div>
-        </div>$totalUsuarios
+        </div>
     </div>
     </div>
 
 @endsection
-
-<script>
-    function removeRole(userId, roleId) {
-        fetch(`/usuarios/${userId}/roles/${roleId}/eliminar`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById(`role-${userId}-${roleId}`).remove();
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
-
-    function addRole(userId) {
-        const roleId = document.getElementById(`new-role-${userId}`).value;
-
-        fetch(`/usuarios/${userId}/roles/agregar`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    role_id: roleId
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const rolesList = document.getElementById(`roles-list-${userId}`);
-                    const newRoleItem = document.createElement('li');
-                    newRoleItem.id = `role-${userId}-${data.role.id}`;
-                    newRoleItem.innerHTML = `${data.role.name} 
-                <button class="btn btn-danger btn-sm" onclick="removeRole(${userId}, ${data.role.id})">
-                    ❌
-                </button>`;
-                    rolesList.appendChild(newRoleItem);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
-</script>

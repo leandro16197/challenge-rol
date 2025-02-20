@@ -6,18 +6,20 @@ use App\Models\Rol;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\userRolModel;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UsuariosController extends Controller
 {
 
+    // Muestra la vista principal de administración
     public function index()
     {
         return view('admin.admin');
     }
 
-
+    // Obtiene y lista los usuarios, con la posibilidad de filtrarlos por nombre y mostrar sus roles asociados
     public function getUsers(Request $request)
     {
         $validated = Validator::make($request->all(), [
@@ -41,15 +43,8 @@ class UsuariosController extends Controller
             ->distinct()
             ->orderBy('users.id', 'desc')
             ->paginate(5);
-    
-        foreach ($usuarios as $usuario) {
-            $usuario->roles = Rol::whereIn('id', function ($query) use ($usuario) {
-                $query->select('role_id')
-                    ->from('user_rol')
-                    ->where('user_id', $usuario->id);
-            })->get();
-        }
-    
+              
+       
         $roles = Rol::all();
         return view('admin.admin-usuarios', [
             'usuarios' => $usuarios,
@@ -60,7 +55,7 @@ class UsuariosController extends Controller
     }
     
 
-
+    // Valida y crea un nuevo usuario, asignándole un rol
     public function addUser(Request $request)
     {
         $validated = $request->validate([
@@ -86,7 +81,7 @@ class UsuariosController extends Controller
         return redirect()->route('admin.users')->with('success', 'Usuario creado correctamente.');
     }
 
-
+    // Modifica el usuario que recibe por parámetros
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
@@ -109,9 +104,15 @@ class UsuariosController extends Controller
         return redirect()->route('admin.users')->with('error', 'El usuario no fue encontrado.');
     }
 
+    // Elimina un usuario por su ID, pero evita eliminar la cuenta del usuario actual
     public function deleteUser($id)
     {
+        if ( Auth::user()->id == $id) {
+            return redirect()->route('admin.users')->with('error', 'No puedes eliminar tu propia cuenta.');
+        }
+    
         $usuario = User::find($id);
+    
         if ($usuario) {
             $usuario->delete();
             return redirect()->route('admin.users')->with('success', 'Usuario eliminado correctamente.');
@@ -120,6 +121,7 @@ class UsuariosController extends Controller
         }
     }
 
+    // Asocia un rol a un usuario si no lo tiene 
     public function agregarRol(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -130,8 +132,8 @@ class UsuariosController extends Controller
                 'message' => 'El usuario ya tiene este rol'
             ]);
         }
-
         $user->roles()->attach($request->role_id);
+
         return response()->json([
             'success' => true,
             'message' => 'Rol agregado correctamente',
@@ -141,7 +143,8 @@ class UsuariosController extends Controller
             ]
         ]);
     }
-
+    
+    // Elimina un rol asignado a un usuario
     public function eliminarRol($id, $role_id)
     {
         $user = User::findOrFail($id);

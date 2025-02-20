@@ -167,29 +167,4 @@
     </div>
 @endsection
 
-<script>
-   document.addEventListener("DOMContentLoaded", function() {
-    // Evento cuando se muestra el modal de modificación
-    document.getElementById("exampleModal").addEventListener("show.bs.modal", function(event) {
-        // Obtener el rol ID desde el botón
-        const roleId = event.relatedTarget.getAttribute("data-role-id");
-        
-        // Obtener los datos del rol (usando algún mecanismo, por ejemplo, datos ocultos o atributos de los botones)
-        const roleName = event.relatedTarget.getAttribute("data-role-name");
-        const roleDescription = event.relatedTarget.getAttribute("data-role-description");
 
-        // Establecer la acción del formulario
-        document.getElementById("modifyRoleForm").action = "/administracion/roles/" + roleId;
-        
-        // Llenar los campos del formulario con los datos actuales del rol
-        document.getElementById("roleName").value = roleName;
-        document.getElementById("roleDescription").value = roleDescription;
-    });
-
-    // Evento cuando se muestra el modal de eliminación
-    document.getElementById("deleteModal").addEventListener("show.bs.modal", function(event) {
-        document.getElementById("deleteForm").action = "/administracion/roles/" + event.relatedTarget.getAttribute("data-role-id");
-    });
-});
-
-</script>

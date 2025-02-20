@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class RolController extends Controller
 {
+    // Muestra la lista de roles, con la posibilidad de filtrarlos por nombre
     public function index(Request $request){
         
         $validated = Validator::make($request->all(), [
@@ -27,7 +28,9 @@ class RolController extends Controller
         ]);
         
 
-    }    
+    }  
+
+    // Crea un nuevo rol con el nombre y descripción  
     public function store(Request $request)
     {
         $request->validate([
@@ -42,6 +45,7 @@ class RolController extends Controller
         return redirect()->route('admin.roles')->with('success', 'Rol agregado exitosamente.');
     }
 
+    // Modifica el rol especificado por su ID
     public function update(Request $request, $id)
     {
         $role = Rol::findOrFail($id);
@@ -52,7 +56,8 @@ class RolController extends Controller
 
         return redirect()->route('admin.roles')->with('success', 'Rol modificado exitosamente.');
     }
-
+    
+    // Elimina el rol especificado por su ID
     public function destroy($id)
     {
         $role = Rol::findOrFail($id);

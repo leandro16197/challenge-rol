@@ -19,6 +19,7 @@
     </div>
 
     <div class="perfil">
+        {{ Auth::user()->name }}
     </div>
 </nav>
 
@@ -26,18 +27,18 @@
     <div class="sidebar-content">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="sidebar-li-text nav-link text-dark" href="/">
+                <a class="sidebar-li-text nav-link text-dark" href="{{ route('admin.admin') }}">
                     <i class="fas fa-home"></i> Inicio
                 </a>
             </li>
             <li class="nav-item">
-                <a class="sidebar-li-text nav-link text-dark" href="/administracion">
-                    <i class="fas fa-calendar-alt"></i> Eventos
+                <a class="sidebar-li-text nav-link text-dark" href="{{ route('admin.users') }}">
+                    <i class="fas fa-users"></i> Usuarios
                 </a>
             </li>
             <li class="nav-item">
-                <a class="sidebar-li-text nav-link text-dark" href="/">
-                    <i class="fas fa-cogs"></i> Configuración
+                <a class="sidebar-li-text nav-link text-dark" href="{{ route('admin.roles') }}">
+                    <i class="fas fa-users-gear"></i> Roles
                 </a>
             </li>
         </ul>
