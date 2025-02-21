@@ -10,7 +10,7 @@ git clone https://github.com/leandro16197/challenge-rol.git
 ### 2. Set up Docker containers
     docker compose up -d --build
 ### 3. Run database migrations
-    docker compose exec -it laravel-challenge bash
+    docker exec -it laravel-challenge bash
     php artisan migrate
 ### 4. Run database seeders 
     php artisan db:seed
